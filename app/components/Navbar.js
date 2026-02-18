@@ -11,7 +11,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             <div className="p-2 bg-[#8A38F5]/10 rounded-lg group-hover:bg-[#8A38F5]/20 transition-colors">
                 <img 
-                 src="/logo.png" 
+                 src="/ramen.png" 
                  alt="Gamcheon Mart Logo" 
                   className="h-10 w-auto object-contain transition-transform group-hover:scale-105" 
                 />              
@@ -26,12 +26,12 @@ export default function Navbar() {
             <Link href="/" className="text-[#8A38F5] font-semibold hover:opacity-80 transition-opacity">
               Home
             </Link>
-            <Link href="/products" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
+          <Link href="/shop" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
               Products
             </Link>
-            <Link href="/contact" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
+            <a href="/#contact" className="text-gray-600 hover:text-[#8A38F5] transition-colors cursor-pointer">
               Contact
-            </Link>
+            </a>
           </div>
         </div>
       </div>

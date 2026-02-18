@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWeixin } from '@fortawesome/free-brands-svg-icons';
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 
-export default function Home() {
+export default function HomePage() {
 
   const bestSellers = mockProducts.filter((p) => p.isBestSeller);
 
@@ -108,12 +108,18 @@ export default function Home() {
             Why Choose Gamcheon Mart?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard 
-                emoji="🇰🇷" 
-                title="100% Authentic" 
-                desc="All products imported directly from Korea" 
-                color="#8A38F5" 
-            />
+           <FeatureCard 
+              emoji={
+                    <img 
+                    src="/flag.png" 
+                    alt="Authentic Korea" 
+                   className="w-10 h-10 object-contain" 
+      />
+    } 
+                   title="100% Authentic" 
+                   desc="All products imported directly from Korea" 
+                   color="#8A38F5" 
+/>
             <FeatureCard 
                 emoji={<FontAwesomeIcon icon={faTruckFast} />}
                 title="Fast Shipping" 
