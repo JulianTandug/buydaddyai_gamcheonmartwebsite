@@ -1,4 +1,7 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
 import { Geist, Geist_Mono } from "next/font/google";
+import Navbar from './components/Navbar';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,10 +22,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      {}
+      <body className="antialiased"> 
+        
+        {}
+        <Navbar /> 
+        
+        {}
+        <main className="pt-20"> 
+          {children}
+        </main>
+        
       </body>
     </html>
   );

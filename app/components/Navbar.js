@@ -1,0 +1,40 @@
+import Link from 'next/link';
+import { ShoppingBag } from 'lucide-react';
+
+export default function Navbar() {
+  return (
+    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          
+          {}
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="p-2 bg-[#8A38F5]/10 rounded-lg group-hover:bg-[#8A38F5]/20 transition-colors">
+                <img 
+                 src="/logo.png" 
+                 alt="Gamcheon Mart Logo" 
+                  className="h-10 w-auto object-contain transition-transform group-hover:scale-105" 
+                />              
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-[#8A38F5] to-[#D91A9C] bg-clip-text text-transparent">
+              Gamcheon Mart
+            </span>
+          </Link>
+
+          {}
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/" className="text-[#8A38F5] font-semibold hover:opacity-80 transition-opacity">
+              Home
+            </Link>
+            <Link href="/products" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
+              Products
+            </Link>
+            <Link href="/contact" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
+              Contact
+            </Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}

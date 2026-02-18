@@ -5,6 +5,9 @@ import { Package, Flame, Sparkles, Wine } from 'lucide-react';
 import { mockProducts } from './data/mockData'; 
 import { ProductCard, FeatureCard } from './components/ProductCard';
 import Footer from './components/Footer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWeixin } from '@fortawesome/free-brands-svg-icons';
+import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 
 export default function Home() {
 
@@ -112,13 +115,13 @@ export default function Home() {
                 color="#8A38F5" 
             />
             <FeatureCard 
-                emoji="🚚" 
+                emoji={<FontAwesomeIcon icon={faTruckFast} />}
                 title="Fast Shipping" 
                 desc="Free shipping on orders over $50" 
                 color="#FF9500" 
             />
             <FeatureCard 
-                emoji="💬" 
+               emoji={<FontAwesomeIcon icon={faWeixin} />}
                 title="24/7 Support" 
                 desc="AI chatbot ready to help anytime" 
                 color="#FF00E1" 
