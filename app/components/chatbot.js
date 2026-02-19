@@ -23,16 +23,16 @@ export default function Chatbot({ menu = [], qna = [] }) {
     setLoading(true)
 
     try {
-      const systemPrompt = `
+     const systemPrompt = `
 You are a friendly Korean mart assistant.
 Answer naturally using the menu and Q&A provided.
 Include availability numbers.
 Never say "I don't know"; give the best answer possible.
 Menu:
-${menu.map(i => ${i.name}: ₱${i.price}, ${i.description}, ${i.available} available).join('\n')}
+${menu.map(i => `${i.name}: ₱${i.price}, ${i.description}, ${i.available} available`).join('\n')}
 Q&A:
-${qna.map(q => Q: ${q.question} A: ${q.answer}).join('\n')}
-`
+${qna.map(q => `Q: ${q.question} A: ${q.answer}`).join('\n')}
+`;
 
       const res = await fetch('/api/chat', {
         method: 'POST',
