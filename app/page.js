@@ -1,29 +1,44 @@
 'use client'; 
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Package, Flame, Sparkles, Wine } from 'lucide-react';
-import { mockProducts } from './data/mockData'; 
 import { ProductCard, FeatureCard } from './components/ProductCard';
-import Footer from './components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWeixin } from '@fortawesome/free-brands-svg-icons';
 import { faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import Chatbot from './components/chatbot';
 
 export default function HomePage() {
+  const [bestSellers, setBestSellers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
 
-  const bestSellers = mockProducts.filter((p) => p.isBestSeller);
+  // --- FETCH LIVE DATA FROM DATABASE ---
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        // Only show products where is_best_seller is TRUE in the database
+        const filtered = data.filter((p) => p.is_best_seller === true);
+        setBestSellers(filtered);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load best sellers:", err);
+        setIsLoading(false);
+      });
+  }, []);
 
- const categories = [
-  { name: 'Ramen', icon: 'ramen.png', color: '#FF9500' },
-  { name: 'Snacks', icon: 'snacks.png', color: '#FF00E1' },
-  { name: 'Drinks', icon: '/drinks.png', color: '#8A38F5' },
-  { name: 'Meals', icon: '/meal.png', color: '#FF9500' },
-];
+  const categories = [
+    { name: 'Ramen', icon: 'ramen.png', color: '#FF9500' },
+    { name: 'Snacks', icon: 'snacks.png', color: '#FF00E1' },
+    { name: 'Drinks', icon: '/drinks.png', color: '#8A38F5' },
+    { name: 'Meals', icon: '/meal.png', color: '#FF9500' },
+  ];
 
   return (
     <div className="min-h-screen">
-      {}
+      {/* HERO SECTION */}
       <section
         className="relative py-20 px-4 text-center"
         style={{
@@ -31,13 +46,13 @@ export default function HomePage() {
         }}
       >
         <div className="relative h-[30vh] flex flex-col items-center justify-center ">
-         <div className="mb-4">
+          <div className="mb-4">
             <img 
               src="/gamcheon_logo trans.png" 
               alt="Gamcheon Mart Logo" 
               className="h-24 md:h-40 lg:h-48 w-auto object-contain"
-             />
-            </div>
+            />
+          </div>
           <Link
             href="/shop"
             className="inline-block px-8 py-4 bg-white rounded-lg text-xl font-medium transition-transform hover:scale-105"
@@ -48,52 +63,56 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
-     <section className="py-16 px-4 bg-gray-50 dark:bg-zinc-900">
-  <div className="max-w-7xl mx-auto">
-    <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-      Shop by Category
-    </h2>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {categories.map((category) => {
-        return (
-          <Link
-            key={category.name}
-            href={`/shop?category=${category.name}`}
-            className="bg-white dark:bg-zinc-800 rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-transparent hover:border-border group"
-          >
-            <div
-              className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center overflow-hidden transition-transform group-hover:scale-110"
-              style={{ backgroundColor: category.color + '20' }}
-            >
-             
-              <img 
-                src={category.icon} 
-                alt={category.name} 
-                className="w-10 h-10 object-contain" 
-              />
-            </div>
-            <h3 className="text-xl font-semibold" style={{ color: category.color }}>
-              {category.name}
-            </h3>
-          </Link>
-        );
-      })}
-    </div>
-  </div>
-</section>
-
-      {}
-      <section className="py-16 px-4">
+      {/* CATEGORIES SECTION */}
+      <section className="py-16 px-4 bg-gray-50 dark:bg-zinc-900">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Best Sellers
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {bestSellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Shop by Category</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {categories.map((category) => (
+              <Link
+                key={category.name}
+                href={`/shop?category=${category.name}`}
+                className="bg-white dark:bg-zinc-800 rounded-lg p-6 text-center hover:shadow-lg transition-shadow border border-transparent hover:border-border group"
+              >
+                <div
+                  className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center overflow-hidden transition-transform group-hover:scale-110"
+                  style={{ backgroundColor: category.color + '20' }}
+                >
+                  <img src={category.icon} alt={category.name} className="w-10 h-10 object-contain" />
+                </div>
+                <h3 className="text-xl font-semibold" style={{ color: category.color }}>{category.name}</h3>
+              </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* BEST SELLERS SECTION (NOW DYNAMIC) */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Best Sellers</h2>
+          
+          {isLoading ? (
+            <div className="text-center text-gray-400 font-bold uppercase animate-pulse">Loading Featured Items...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {bestSellers.map((product) => (
+                // Note: We use product.image_url (DB column name) instead of product.image (mock name)
+                <ProductCard 
+                  key={product.id} 
+                  product={{
+                    ...product,
+                    image: product.image_url // Mapping DB name to what ProductCard expects
+                  }} 
+                />
+              ))}
+            </div>
+          )}
+
+          {bestSellers.length === 0 && !isLoading && (
+            <p className="text-center text-gray-400 italic">No best sellers featured right now.</p>
+          )}
+
           <div className="text-center mt-10">
             <Link
               href="/shop"
@@ -106,43 +125,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {}
+      {/* FEATURES SECTION */}
       <section className="py-16 px-4 bg-gray-50 dark:bg-zinc-900">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Why Choose Gamcheon Mart?
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Why Choose Gamcheon Mart?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-           <FeatureCard 
-              emoji={
-                    <img 
-                    src="/flag.png" 
-                    alt="Authentic Korea" 
-                   className="w-10 h-10 object-contain" 
-      />
-    } 
-                   title="100% Authentic" 
-                   desc="All products imported directly from Korea" 
-                   color="#8A38F5" 
-/>
             <FeatureCard 
-                emoji={<FontAwesomeIcon icon={faTruckFast} />}
-                title="Fast Shipping" 
-                desc="Free shipping on orders over $50" 
-                color="#FF9500" 
+              emoji={<img src="/flag.png" alt="Authentic Korea" className="w-10 h-10 object-contain" />} 
+              title="100% Authentic" 
+              desc="All products imported directly from Korea" 
+              color="#8A38F5" 
             />
             <FeatureCard 
-               emoji={<FontAwesomeIcon icon={faWeixin} />}
-                title="24/7 Support" 
-                desc="AI chatbot ready to help anytime" 
-                color="#FF00E1" 
+              emoji={<FontAwesomeIcon icon={faTruckFast} />}
+              title="Fast Shipping" 
+              desc="Free shipping on orders over $50" 
+              color="#FF9500" 
+            />
+            <FeatureCard 
+              emoji={<FontAwesomeIcon icon={faWeixin} />}
+              title="24/7 Support" 
+              desc="AI chatbot ready to help anytime" 
+              color="#FF00E1" 
             />
           </div>
         </div>
       </section>
       <Chatbot />
     </div>
-    
   );
 }
-

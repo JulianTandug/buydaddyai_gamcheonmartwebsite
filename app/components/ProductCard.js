@@ -1,37 +1,42 @@
+'use client';
 
-export function FeatureCard({ emoji, title, desc, color }) {
+import Link from 'next/link';
+
+// 1. Export the ProductCard
+export function ProductCard({ product }) {
   return (
-    <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 text-center border border-border">
-      <div
-        className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-3xl"
-        style={{ backgroundColor: color + '20' }}
-      >
-        {emoji}
+    <div className="bg-white dark:bg-zinc-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-zinc-700 transition-transform hover:scale-[1.02]">
+      <div className="h-48 w-full rounded-xl overflow-hidden mb-4 bg-gray-100">
+        <img 
+          src={product.image || '/placeholder.jpg'} 
+          alt={product.name} 
+          className="w-full h-full object-cover" 
+        />
       </div>
-      <h3 className="text-xl font-semibold mb-2" style={{ color }}>{title}</h3>
-      <p className="text-muted-foreground">{desc}</p>
+      <h3 className="font-bold text-lg text-gray-800 dark:text-white uppercase truncate">{product.name}</h3>
+      <p className="text-[#8A38F5] font-black text-xl mb-4">₱{product.price}</p>
+      <Link 
+        href={`/shop/${product.id}`}
+        className="block text-center w-full py-3 bg-gray-100 dark:bg-zinc-700 rounded-xl font-bold text-xs uppercase hover:bg-gray-200 transition-colors"
+      >
+        View Details
+      </Link>
     </div>
   );
 }
 
-
-export function ProductCard({ product }) {
+// 2. Export the FeatureCard (THIS WAS LIKELY MISSING)
+export function FeatureCard({ emoji, title, desc, color }) {
   return (
-    <div className="bg-white dark:bg-zinc-800 rounded-lg p-4 shadow-sm border border-border hover:shadow-md transition-shadow">
-      <div className="relative aspect-square mb-3 overflow-hidden rounded-md">
-         <img 
-           src={product.image} 
-           alt={product.name} 
-           className="w-full h-full object-cover" 
-         />
+    <div className="p-8 bg-white dark:bg-zinc-800 rounded-[32px] text-center shadow-sm border border-gray-100 dark:border-zinc-700">
+      <div 
+        className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center text-3xl shadow-inner"
+        style={{ backgroundColor: `${color}20`, color: color }}
+      >
+        {emoji}
       </div>
-      <h3 className="font-bold text-lg">{product.name}</h3>
-      <p className="text-sm text-muted-foreground mb-3">{product.category}</p>
-      
-      
-      <p className="text-xl font-bold" style={{ color: '#8A38F5' }}>
-        ${product.price.toFixed(2)}
-      </p>
+      <h3 className="text-xl font-black mb-2 uppercase tracking-tight" style={{ color: color }}>{title}</h3>
+      <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
     </div>
   );
 }
