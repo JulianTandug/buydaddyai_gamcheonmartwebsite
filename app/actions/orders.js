@@ -5,10 +5,9 @@ export async function createOrderAction(data) {
   const sql = neon(process.env.DATABASE_URL);
   
   try {
-    // 1. Ensure items are a clean array
     const itemsArray = typeof data.items === 'string' ? JSON.parse(data.items) : data.items;
 
-    // 2. Insert the new order
+    // 1. Insert the new order
     await sql`
       INSERT INTO orders (
         customer_name, user_email, phone_number, user_role, address, 
@@ -21,18 +20,18 @@ export async function createOrderAction(data) {
       )
     `;
 
-    // 3. 📉 Loop through items and update stock
-  for (const item of itemsArray) {
-  // This turns "COCA COLA" into "%COCA%COLA%" so it finds "coca-cola"
-  const fuzzyName = `%${item.name.trim().replace(/[\s-]/g, '%')}%`;
+    // 2. 📉 Selective Stock Update
+    for (const item of itemsArray) {
+      const fuzzyName = `%${item.name.trim().replace(/[\s-]/g, '%')}%`;
 
-  await sql`
-    UPDATE products 
-    SET stock_quantity = stock_quantity - ${Number(item.quantity)} 
-    WHERE id = ${item.id} 
-    OR name ILIKE ${fuzzyName}
-  `;
-}
+      await sql`
+        UPDATE products 
+        SET stock_quantity = stock_quantity - ${Number(item.quantity)} 
+        WHERE (id = ${item.id} OR name ILIKE ${fuzzyName})
+        AND stock_quantity > 0
+      `;
+ 
+    }
 
     return { success: true };
   } catch (error) {

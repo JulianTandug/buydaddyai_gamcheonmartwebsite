@@ -38,6 +38,18 @@ export async function POST(req) {
       return `- ${p.name} (ID: ${p.id}): ₱${p.price} (${status})`;
     }).join('\n');
 
+    const bestSellersData = await sql`
+     SELECT name, price 
+     FROM products 
+     WHERE is_best_seller = TRUE
+  `;
+
+  const bestSellersList = bestSellersData
+  .map(p => {
+    const price = Number(p.price) || 0; 
+    return `- ${p.name} (₱${price.toFixed(2)})`;
+  })
+  .join('\n');
 
     const systemPrompt = {
       role: "system",
@@ -46,10 +58,15 @@ export async function POST(req) {
       KNOWLEDGE BASE (Answer questions ONLY using this data):
       ${ai_knowledge || "Location: Digos City, Philippines."}
 
+      BEST SELLERS (Always recommend these first):
+     ${bestSellersList || "Check our current menu for top picks!"}
+
       MANDATORY ORDER FLOW:
       1. Ask for Full Name, Delivery Address, and Payment Method (GCash/COD).
       2. Summarize the details and wait for the user to say "Confirm" or "Settle".
       3. ONLY THEN output the [ORDER_SIGNAL].
+
+      
 
       SIGNAL STRUCTURE:
       [ORDER_SIGNAL: {"customer_name": "NAME", "address": "ADDRESS", "payment_method": "METHOD", "items": [{"id": 36, "name": "Jajangmyeon", "price": 190, "quantity": 1}], "total": 190}]

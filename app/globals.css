@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
 @theme {
   /* Colors - By naming them --color-X, you get classes like bg-primary, text-foreground, etc. */
   --color-background: #ffffff;

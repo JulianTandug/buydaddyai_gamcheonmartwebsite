@@ -57,7 +57,7 @@ export default function Navbar() {
             <Link href="/shop" className="text-gray-600 hover:text-[#8A38F5] transition-colors">
               Products
             </Link>
-            <a href="/contact" className="text-gray-600 hover:text-[#8A38F5] transition-colors cursor-pointer">
+            <a href="/home#contact" className="text-gray-600 hover:text-[#8A38F5] transition-colors cursor-pointer">
               Contact
             </a>
 
